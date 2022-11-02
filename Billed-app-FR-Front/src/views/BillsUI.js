@@ -20,9 +20,12 @@ const row = (bill) => {
   }
 
 const rows = (data) => {
-  let dataArray = {};
-  
-    dataArray = data.sort(function (a,b){
+  // console.log(data)
+  let dataArray = { };
+
+  if(!data) return dataArray;
+  // console.log(dataArray)
+  dataArray = data.sort(function (a,b){
     return new Date(b.date).valueOf() - new Date(a.date).valueOf();
   })
 

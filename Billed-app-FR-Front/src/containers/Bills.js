@@ -24,7 +24,10 @@ export default class {
     const billUrl = icon.getAttribute("data-bill-url")
     const imgWidth = Math.floor($('#modaleFile').width() * 0.5)
     $('#modaleFile').find(".modal-body").html(`<div style='text-align: center;' class="bill-proof-container"><img width=${imgWidth} src=${billUrl} alt="Bill" /></div>`)
-    $('#modaleFile').modal('show')
+    
+    if(typeof $('#modaleFile').modal == "function"){
+      $('#modaleFile').modal('show')
+    }
   }
 
   
@@ -33,7 +36,6 @@ export default class {
     let storeArray = []
     let sortedArray = []
     let sortedDoc = []
-    let sortedDocFinal
     let count = 0;
     if (this.store) {
 
@@ -44,29 +46,27 @@ export default class {
         let bills = snapshot
           .map(doc => {
             try {
-              // dateArray.push(doc.date)
-              // storeArray.push(doc)
-              // // function tri
-              // if(dateArray.length > 1)
-              //    sortedArray = dateArray.sort(byDate)
-             
-              // function byDate(a,b){
-              //   return new Date(b).valueOf() - new Date(a).valueOf();
-              // }
+              dateArray.push(doc.date)
+              storeArray.push(doc)
+              // function tri
+              if(dateArray.length > 1)
+                 sortedArray = dateArray.sort(function (a,b) {
+                  return new Date(b).valueOf() - new Date(a).valueOf();
+                 })
 
-              // if(count == snapshot.length -1){
-              //   for(let i = 0; i < sortedArray.length; i++){
-              //     for (let j = 0; j < storeArray.length; j++) {
+              if(count == snapshot.length -1){
+                for(let i = 0; i < sortedArray.length; i++){
+                  for (let j = 0; j < storeArray.length; j++) {
                     
-              //       if(sortedArray[i] == storeArray[j].date){
-              //         sortedDoc.push(storeArray[j]);
-              //         break
-              //       }
-              //     }
-              //   }
-              // }
+                    if(sortedArray[i] == storeArray[j].date){
+                      sortedDoc.push(storeArray[j]);
+                      break
+                    }
+                  }
+                }
+              }
             
-              // count++;
+              count++;
               return {
                 ...doc,
                 date: doc.date,
@@ -80,7 +80,7 @@ export default class {
               
               return {
                 ...doc,
-                date: result,
+                date: doc.date,
                 status: formatStatus(doc.status)
               }
           }
