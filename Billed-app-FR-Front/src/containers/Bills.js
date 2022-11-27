@@ -1,5 +1,6 @@
 import { ROUTES_PATH } from '../constants/routes.js'
 import { formatDate, formatStatus } from "../app/format.js"
+import $ from 'jquery';
 import Logout from "./Logout.js"
 
 export default class {
@@ -30,67 +31,31 @@ export default class {
     }
   }
 
-  
   getBills = () => {
-    let dateArray =[]
-    let storeArray = []
-    let sortedArray = []
-    let sortedDoc = []
-    let count = 0;
-    if (this.store) {
-
+    if(this.store){
       return this.store
-      .bills()
-      .list()
-      .then(snapshot => {
-        let bills = snapshot
-          .map(doc => {
-            try {
-              dateArray.push(doc.date)
-              storeArray.push(doc)
-              // function tri
-              if(dateArray.length > 1)
-                 sortedArray = dateArray.sort(function (a,b) {
-                  return new Date(b).valueOf() - new Date(a).valueOf();
-                 })
-
-              if(count == snapshot.length -1){
-                for(let i = 0; i < sortedArray.length; i++){
-                  for (let j = 0; j < storeArray.length; j++) {
-                    
-                    if(sortedArray[i] == storeArray[j].date){
-                      sortedDoc.push(storeArray[j]);
-                      break
-                    }
-                  }
-                }
-              }
-            
-              count++;
+        .bills()
+        .list()
+        .then(snapshot => {
+          const bills = snapshot.sort((a, b) => ((a.date > b.date) ? 1 : -1)).map(doc => {
+            try{
               return {
                 ...doc,
-                date: doc.date,
+                date: formatDate(doc.date),
                 status: formatStatus(doc.status)
               }
-              
-            } catch(e) {
-              // if for some reason, corrupted data was introduced, we manage here failing formatDate function
-              // log the error and return unformatted date in that case
-              console.log(e,'for',doc)
-              
+            } catch(e){
+              console.log(e, 'for', doc)
               return {
                 ...doc,
-                date: doc.date,
-                status: formatStatus(doc.status)
+                date : doc.date,
+                status: formatDate(doc.status)
               }
-          }
+            }
           })
-        // return sortedDoc
-        return bills
-      })
+          return bills
+        })
     }
-    
-   
   }
 }
 

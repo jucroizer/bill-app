@@ -2,12 +2,13 @@
  * @jest-environment jsdom
  */
 
-import {screen, waitFor} from "@testing-library/dom"
+import {fireEvent, screen, waitFor} from "@testing-library/dom"
 import BillsUI from "../views/BillsUI.js"
 import { bills } from "../fixtures/bills.js"
 import userEvent from '@testing-library/user-event'
 import mockStore from "../__mocks__/store"
 import { ROUTES, ROUTES_PATH } from "../constants/routes.js"
+import $ from 'jquery';
 // import { ROUTES_PATH} from "../constants/routes.js";
 import {localStorageMock} from "../__mocks__/localStorage.js";
 
@@ -41,6 +42,7 @@ describe("Given I am connected as an employee", () => {
     })
   })
 })
+
 
 describe('Given I am connected as Employee and I am on Dashboard page and I clicked on "New Bill"', () => {
   describe('When I click on the button', () => {
@@ -89,10 +91,29 @@ describe('Given I am connected as Employee and I am on Dashboard page and I clic
       eye.addEventListener('click', handleClickIconEye)
       userEvent.click(eye)
       expect(handleClickIconEye).toHaveBeenCalled()
+    })
+    test('Should open modal when i click on que IconEye', () => {
+      $.fn.modal = jest.fn()
+      const html = BillsUI({ data: bills })
+      document.body.innerHTML = html
+      Object.defineProperty(window, "localStorage", { value: { getItem: jest.fn(() => null), setItem: jest.fn(() => null) } },
+      )
 
-      //const modale = screen.getAllByText("Justificatif")[0]
-      // document.querySelector(`div[id="modaleFile"]`)
-      // expect(modale).toBeTruthy()
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ data: [], pathname });
+      };
+      const firebase = jest.fn()
+      const bill = new Bills({ document, onNavigate, firebase, localStorage: window.localStorage })
+
+      const handleClickIconEye = jest.fn(bill.handleClickIconEye);
+
+      const iconsEye = screen.getAllByTestId(`icon-eye`)
+      const firstEye = iconsEye[0]
+      firstEye.addEventListener("click", handleClickIconEye(firstEye))
+      userEvent.click(firstEye)
+
+      expect($.fn.modal).toHaveBeenCalled()
+
     })
   })
 })
@@ -137,6 +158,34 @@ describe("Given I am a user connected as Employee", () => {
       const tabBills = screen.getAllByTestId('tbody')
       expect(tabBills).toBeTruthy() 
     })
+    test('Should display the title', () => {
+      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+      window.localStorage.setItem('user', JSON.stringify({
+        type: 'Employee'
+      }))
+      const root = document.createElement("div")
+      root.setAttribute("id", "root")
+      document.body.append(root)
+      router()
+      window.onNavigate(ROUTES_PATH.Bills)
+     
+      const header = screen.getByText("Mes notes de frais")
+      expect(header).toBeTruthy()
+    });
+    test('Should display the new bill button', () => {
+      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+      window.localStorage.setItem('user', JSON.stringify({
+        type: 'Employee'
+      }))
+      const root = document.createElement("div")
+      root.setAttribute("id", "root")
+      document.body.append(root)
+      router()
+      window.onNavigate(ROUTES_PATH.Bills)
+     
+      const btnNewBill = screen.getByTestId("btn-new-bill")
+      expect(btnNewBill).toBeTruthy()
+    });
   describe("When an error occurs on API", () => {
     beforeEach(() => {
       jest.spyOn(mockStore, "bills")
@@ -158,15 +207,6 @@ describe("Given I am a user connected as Employee", () => {
 
       jest.spyOn(mockStore, 'bills').mockImplementationOnce(() => Promise.reject(new Error('Erreur 404')));
           document.body.innerHTML = BillsUI({ error: 'Erreur 404' });
-
-      // mockStore.bills.mockImplementationOnce(() => {
-      //   return {
-      //     list : () =>  {
-      //       return Promise.reject(new Error("Erreur 404"))
-      //     }
-      //   }})
-      // window.onNavigate(ROUTES_PATH.Bills)
-      //await new Promise(process.nextTick);
       const message = await screen.getByText("Erreur 404")
       expect(message).toBeTruthy()
     })
@@ -175,17 +215,6 @@ describe("Given I am a user connected as Employee", () => {
 
       jest.spyOn(mockStore, 'bills').mockImplementationOnce(() => Promise.reject(new Error('Erreur 500')));
           document.body.innerHTML = BillsUI({ error: 'Erreur 500' });
-
-      // mockStore.bills.mockImplementationOnce(() => {
-      //   return {
-      //     list : () =>  {
-      //       return Promise.reject(new Error("Erreur 500"))
-      //     }
-      //   }})
-
-      //   // méthode spyON
-      // window.onNavigate(ROUTES_PATH.Bills)
-      //await new Promise(process.nextTick);
       const message = await screen.getByText("Erreur 500")
       expect(message).toBeTruthy()
     })
