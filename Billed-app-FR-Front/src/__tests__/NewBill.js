@@ -5,17 +5,17 @@
 //import { screen } from "@testing-library/dom"
 import NewBillUI from "../views/NewBillUI.js"
 import NewBill from "../containers/NewBill.js"
-import {localStorageMock} from "../__mocks__/localStorage.js";
+import { localStorageMock } from "../__mocks__/localStorage.js";
 import router from "../app/Router.js";
 import { ROUTES, ROUTES_PATH } from "../constants/routes.js"
-import {screen, waitFor} from "@testing-library/dom"
+import { screen, waitFor } from "@testing-library/dom"
 import { fireEvent } from "@testing-library/dom";
 import userEvent from '@testing-library/user-event'
 import mockStore from "../__mocks__/store"
 
 describe("Given I am connected as an employee", () => {
   describe("When I am on NewBill Page", () => {
-    test("Then bill icon in vertical layout should be highlighted", async () =>  {
+    test("Then bill icon in vertical layout should be highlighted", async () => {
       const html = NewBillUI()
       document.body.innerHTML = html
       //to-do write assertion
@@ -97,7 +97,7 @@ describe('Given I am connected as Employee and I am on New Bill page and I click
         document.body.innerHTML = ROUTES({ data: [], pathname });
       };
 
-      const testFile = new File([""], "test.jpg", {type:"image/jpg"})
+      const testFile = new File([""], "test.jpg", { type: "image/jpg" })
       //const testFile = document.querySelector(`input[data-testid="file"]`).files[0]
       window.localStorage.setItem('ext', "jpg")
       const newBill = new NewBill({ document, onNavigate, store: mockStore, localStorage })
@@ -110,13 +110,13 @@ describe('Given I am connected as Employee and I am on New Bill page and I click
           files: [testFile]
         }
       })
-       
+
       expect(changeFile).toHaveBeenCalled()
     })
   })
   describe('When I choose a file in the finder', () => {
     test('Then format of file is jpeg', () => {
-      
+
       // const fileExtension = 'jpg';
       const html = NewBillUI()
       document.body.innerHTML = html
@@ -124,7 +124,7 @@ describe('Given I am connected as Employee and I am on New Bill page and I click
         document.body.innerHTML = ROUTES({ data: [], pathname });
       };
 
-      const testFile = new File([""], "test.jpeg", {type:"image/jpeg"})
+      const testFile = new File([""], "test.jpeg", { type: "image/jpeg" })
       //const testFile = document.querySelector(`input[data-testid="file"]`).files[0]
       window.localStorage.setItem('ext', "jpeg")
       const newBill = new NewBill({ document, onNavigate, store: mockStore, localStorage })
@@ -137,21 +137,21 @@ describe('Given I am connected as Employee and I am on New Bill page and I click
           files: [testFile]
         }
       })
-       
+
       expect(changeFile).toHaveBeenCalled()
     })
   })
 
   describe('When I choose a file in the finder', () => {
     test('Then format of file is png', () => {
-      
+
       const html = NewBillUI()
       document.body.innerHTML = html
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ data: [], pathname });
       };
 
-      const testFile = new File([""], "test.png", {type:"image/png"})
+      const testFile = new File([""], "test.png", { type: "image/png" })
       //const testFile = document.querySelector(`input[data-testid="file"]`).files[0]
       window.localStorage.setItem('ext', "png")
       const newBill = new NewBill({ document, onNavigate, store: mockStore, localStorage })
@@ -164,7 +164,7 @@ describe('Given I am connected as Employee and I am on New Bill page and I click
           files: [testFile]
         }
       })
-       
+
       expect(changeFile).toHaveBeenCalled()
     })
   })
@@ -220,5 +220,3 @@ test('Then i have posted a bill from my MockedApi', async () => {
   await mockStore.bills(myNewBill)
   expect(SpyOn).toHaveBeenCalled()
 })
-
-

@@ -1,11 +1,11 @@
 {
   "scripts": {
-    "test": "jest"
+    "test": "jest --coverage --noStackTrace --silent"
   },
   "jest": {
     "verbose": false,
     "setupFiles": [
-      "Billed-app-FR-Front/setup-jest.js"
+      "./setup-jest.js"
     ],
     "collectCoverageFrom": [
       "**/*.{js,jsx}",
