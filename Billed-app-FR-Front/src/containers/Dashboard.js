@@ -85,38 +85,8 @@ export default class {
     if (typeof $('#modaleFileAdmin1').modal === 'function') $('#modaleFileAdmin1').modal('show')
   }
 
-  /*handleEditTicket(e, bill, bills) {
-    // Suppression du compteur dans le if/else mais gardé le compteur pour 
-    // que le nombre de billets dans les catégories s'incrémente.
-    if (this.counter === undefined || this.id !== bill.id) this.counter = 0
-    if (this.id === undefined || this.id !== bill.id) this.id = bill.id
-    if (this.counter % 2 === 0) {
-      //console.log("if de handleEditTicket",this.counter)
-      bills.forEach(b => {
-        $(`#open-bill${b.id}`).css({ background: '#0D5AE5' })
-      })
-      $(`#open-bill${bill.id}`).css({ background: '#2A2B35' })
-      $('.dashboard-right-container div').html(DashboardFormUI(bill))
-      $('.vertical-navbar').css({ height: '150vh' })
-      //this.counter++
-    } else {
-     // console.log("else de handleEditTicket", this.counter)
-      $(`#open-bill${bill.id}`).css({ background: '#0D5AE5' })
-
-      $('.dashboard-right-container div').html(`
-        <div id="big-billed-icon" data-testid="big-billed-icon"> ${BigBilledIcon} </div>
-      `)
-      $('.vertical-navbar').css({ height: '120vh' })
-
-      //  this.counter = 0
-    }
-    $('#icon-eye-d').click(this.handleClickIconEye)
-    $('#btn-accept-bill').click((e) => this.handleAcceptSubmit(e, bill))
-    $('#btn-refuse-bill').click((e) => this.handleRefuseSubmit(e, bill))
-  }*/
-
-  handleEditTicket(e, bill, bills) {
-    let close = this.id === bill.id;
+ handleEditTicket(e, bill, bills) {
+    //let close = this.id === bill.id;
     if (this.counter === undefined || this.id !== bill.id) this.counter = 0
     if (this.id === undefined || this.id !== bill.id) this.id = bill.id
     if (this.counter%2 === 0) {
@@ -127,17 +97,15 @@ export default class {
     $(`#open-bill${bill.id}`).css({background: '#2A2B35'})
     $('.dashboard-right-container div').html(DashboardFormUI(bill))
     $('.vertical-navbar').css({height: '150vh'})
-    this.counter++
     }
 
     else {
       $(`#open-bill${bill.id}`).css({background: '#0D5AE5'})
       $('.dashboard-right-container div').html(`
         <div id="big-billed-icon" data-testid="big-billed-icon"> ${BigBilledIcon} </div>
-      `)
+      `) 
       $('.vertical-navbar').css({height: '120vh'})
       this.id = null;
-      this.counter = 0
     }
 
     $('#icon-eye-d').click(this.handleClickIconEye)
@@ -166,7 +134,6 @@ export default class {
   }
 
   handleShowTickets(e, bills, index) {
-
     // création de 3 compteur supplémentaires pour que chacun soit concentré sur son index
     // comme ça si l'index est positif la liste s'ouvre si elle est négative la liste se ferme
     if (this.counter === undefined) this.counter = 0
