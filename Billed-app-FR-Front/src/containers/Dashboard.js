@@ -145,16 +145,11 @@ export default class {
     else if (this.index == 2) this.counter = this.counter2
     else if (this.index == 3) this.counter = this.counter3
     if (this.counter % 2 == 0) {
-      // console.log("c'est le counter du if", this.counter)
-      // console.log("je suis l'index", this.index)
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(0deg)'})
       $(`#status-bills-container${this.index}`)
         .html(cards(filteredBills(bills, getStatus(this.index))))
-      // console.log(getStatus(this.index))
       if(this.index == 1){
-        // console.log("index du 1er if", this.index)
         this.counter1++;
-        // console.log(this.counter1)
       }
       if(this.index == 2){
         this.counter2++;

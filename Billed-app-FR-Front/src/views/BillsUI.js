@@ -25,7 +25,7 @@ const row = (bill) => {
         const dateA = Date.parse(a.date)
         const dateB = Date.parse(b.date)
   
-        return dateA > dateB ? -1 : 1;
+        return dateA > dateB ? 1 : -1;
       })
     }
     return data && data.length ? data.map((bill) => row(bill)).join("") : ""
