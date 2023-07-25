@@ -1,13 +1,7 @@
 {
-  "name": "bill-app",
-  "version": "0.1.0",
-  "private" : "false",
-  "homepage" : "https://jucroizer_github.io/jucroizer/bill-app",
   "scripts": {
     "test": "jest --coverage --noStackTrace --silent"
   },
-  "predeploy" : "npm run build",
-  "deploy" : "gh-pages -d build",
   "jest": {
     "verbose": false,
     "setupFiles": [
